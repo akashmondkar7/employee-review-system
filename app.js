@@ -8,6 +8,9 @@ connectDB();
 const app = express()
 
 const port = process.env.PORT;
+const authRoutes = require("./routes/authRoutes");
+
+app.use("/", authRoutes);
 
 app.listen(port,()=>{
     console.log(`server is running on ${port}`)
