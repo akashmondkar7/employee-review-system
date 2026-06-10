@@ -11,7 +11,8 @@ const port = process.env.PORT;
 const authRoutes = require("./routes/authRoutes");
 
 app.use("/", authRoutes);
-
+app.use(express.urlencoded({extended:false}))
+app.set("")
 app.listen(port,()=>{
     console.log(`server is running on ${port}`)
 })
