@@ -1,22 +1,26 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './config/mongoose.js';
-
-
+import express from "express";
+import dotenv from "dotenv";
+import session from "express-session";
+import connectDB from "./config/mongoose.js";
 
 dotenv.config();
-connectDB();
 
+connectDB();
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/",(req,resp)=>{
-    resp.send("employee review system")
-})
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+  })
+);
 
+const PORT = process.env.PORT;
 
-const port=process.env.PORT;
-app.listen(port,(req,resp)=>{
-    console.log(`Server is running on ${port}` )
+app.listen(PORT, () => {
+  console.log(`Server is running on ${PORT}`);
 });
