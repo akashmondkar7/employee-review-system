@@ -11,16 +11,18 @@ connectDB();
 const app = express();
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
-app.use("/", authRoutes);
+// Register session middleware before routes and ensure a default secret for local dev
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || "dev_session_secret",
     resave: false,
     saveUninitialized: false
   })
 );
 
-const PORT = process.env.PORT;
+app.use("/", authRoutes);
+
+const PORT = process.env.PORT || 4800;
 
 app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`);
