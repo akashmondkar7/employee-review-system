@@ -32,3 +32,45 @@ export const registerUser = async (req, res) => {
     console.log(error);
   }
 };
+export const loginUser = async (req, res) => {
+  try {
+
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.send("Invalid Credentials");
+    }
+
+    const isMatch =
+      await user.comparePassword(password);
+
+    if (!isMatch) {
+      return res.send("Invalid Credentials");
+    }
+
+    req.session.userId = user._id;
+
+    req.session.isAdmin = user.isAdmin;
+
+    if (user.isAdmin) {
+      return res.redirect("/admin/dashboard");
+    }
+
+    res.redirect("/employee/dashboard");
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const logout = (req, res) => {
+
+  req.session.destroy(() => {
+
+    res.redirect("/login");
+
+  });
+
+};
